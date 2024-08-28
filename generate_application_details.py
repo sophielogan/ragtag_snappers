@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+from datetime import datetime
 
 from application_object import SnapApplication
 
@@ -31,21 +32,35 @@ def generate_application_details(ingestion_attrs):
     applications = applications[applications.STATENAME == ingestion_attrs["state_name"]]
     # add meta data obj num applicants in state... etc
 
-    for applicant_num in range(applications.shape[NUM_APPLICANTS]):
-        # send as series
-        single_application = applications.iloc[applicant_num]
-        SnapApplication(single_application)
+    applications = clean_data(applications)
+
+    # Open the CSV file and write the dictionaries
+    with open(
+        f"model_input_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.txt", "w"
+    ) as txtfile:
+
+        for applicant_num in range(applications.shape[NUM_APPLICANTS]):
+            print(applicant_num)
+            txtfile.write(f"Information about Applicant: {applicant_num}")
+            txtfile.write("\n")
+            # one application becomes a pandas series
+            single_application = applications.iloc[applicant_num]
+            snapp = SnapApplication(single_application)
+            txtfile.write(snapp.application_story)
+            txtfile.write("\n \n")
+
+
+def clean_data(df):
+    """"""
+    return df
 
 
 if __name__ == "__main__":
     ingestion_attrs = {
         "state_name": "District of Columbia",
         "qc_year": 2022,
-        "data_dir": "C:/Users/SLogan/Downloads/snapqc_generate_text (2)/data",
+        "data_dir": "/Users/ELJ479/pprojects/policy2code/data",
         "file_name": "qcfy2022_csv.zip",
-        "output_dir": "C:/Users/SLogan/Downloads/snapqc_generate_text (2)/output",
-        # "data_dir": "/Users/ELJ479/pprojects/policy2code/data",
-        # "file_name": "qcfy2022_csv.zip",
-        # "output_dir": "/Users/ELJ479/pprojects/policy2code/output"
+        "output_dir": "/Users/ELJ479/pprojects/policy2code/output",
     }
     generate_application_details(ingestion_attrs)

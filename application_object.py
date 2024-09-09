@@ -1,4 +1,13 @@
 from config import (
+    PERSON_LEVEL_ATTRS,
+    REL,
+    CTZN,
+    SEX,
+    DIS,
+    RACETH,
+    YRSED,
+    WORK,
+    EMPSTA,
     FSAFIL,
     AGENCY,
     DISCOVERY,
@@ -8,12 +17,58 @@ from config import (
     VARIANCE_VERIFICATION,
 )
 
+import math
+import textwrap
+
 
 class SnapApplication(object):
 
     def __init__(self, application):
 
         self.app = application
+
+        # person-level characteristics
+        persons = {}
+        total_persons = 0
+        num_applicants = self.app.loc["FSAFIL1":"FSAFIL16"].tolist()
+        # i + 1 reflects the person's characteristics column number
+        for i, person in enumerate(num_applicants):
+            if math.isnan(person):
+                continue
+            total_persons += 1
+
+            # unit-level
+            # Within this SNAP unit there are X individuals.
+            # The X person is the head of the household. / The first listed adult is hoh. / The oldest child is the head of the household.
+            # (0s) N peope live in the household and are not part of the SNAP unit.
+
+            # story of one person
+            person_level = (
+                textwrap.dedent(
+                    f"""
+                There is a {self.app.loc[f'AGE{i+1}']} year old {SEX[self.app.loc[f'SEX{i+1}']]};
+                they are {REL[self.app.loc[f'REL{i+1}']]}.
+                This individual is {FSAFIL[self.app.loc[f'FSAFIL{i+1}']]}.
+                They are {CTZN[self.app.loc[f'CTZN{i+1}']]} and {DIS[self.app.loc[f'DIS{i+1}']]}.
+                {RACETH[self.app.loc[f'RACETH{i+1}']]}.
+                {YRSED[self.app.loc[f'YRSED{i+1}']]}.
+                They are {WORK[self.app.loc[f'WORK{i+1}']]} {EMPSTA[self.app.loc[f'EMPSTA{i+1}']]}.
+                They reported ${self.app.loc[f'DPCOST{i+1}']} in dependent childcare costs.
+            """
+                )
+                .replace("\n", " ")
+                .strip()
+            )
+
+            # If not working are they federally exempt? {WRKREG}
+            # They are {EMPRG employment training program} and {EMPSTA employment status}
+            # {1,2} This person is elgiible for SNAP / {4+} This person is ineligible for SNAP / {99} unknown
+
+            import pdb
+
+            pdb.set_trace()
+
+        # filter for errors
 
         kwargs = {
             "number_of_individuals_listed": self.app.iloc[0:16].count(),

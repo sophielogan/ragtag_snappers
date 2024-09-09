@@ -40,7 +40,6 @@ def generate_application_details(ingestion_attrs):
     ) as txtfile:
 
         for applicant_num in range(applications.shape[NUM_APPLICANTS]):
-            print(applicant_num)
             txtfile.write(f"Information about Applicant: {applicant_num}")
             txtfile.write("\n")
             # one application becomes a pandas series

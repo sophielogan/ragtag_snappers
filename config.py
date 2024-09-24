@@ -1,141 +1,26 @@
-PERSON_LEVEL_ATTRS = {
-    "ABWDSTI": "ABAWD status",
-    "AGEI": "Age",
-    "CTZNI": "Citizenship status",
-    "DISI": "Person-level disability indicator",
-    "DPCOSTI": "Reported dependent care cost",
-    "EMPRGI": "SNAP Employment and Training program status",
-    "EMPSTAI": "Employment status—type",
-    "EMPSTBI": "Employment status—amount",
-    "FSAFLI": "SNAP case affiliation",
-    "FSUNI": "Position of head of SNAP unit",
-    "NDISCAI": "Adult age 18–49 without disabilities in childless unit status",
-    "RACETHI": "Race/ethnicity",
-    "RELI": "Relationship to head of household",
-    "SEXI": "Sex",
-    "WORKI": "Person-level working indicator",
-    "WRKREGI": "Work registration status",
-    "YRSEDI": "Highest educational level completed",
-}
-
-REL = {
-    1: "head of the household",
-    2: "the spouse to the head of the household",
-    3: "the parent to the head of the household",
-    4: "the daughter, stepdaughter, son, or stepson to the head of the household",
-    5: "a relative (brother, sister, niece, nephew, grandchild, great-grandchild, cousin) to the head of the household",
-    6: "a foster child",
-    7: "not related to the head of the household",
-}
-
 # SNAP CASE AFFILIATION 1-16
 FSAFIL = {
-    1: "is eligible for this SNAP case under review and entitled to receive benefits",
-    # added by Mathematica for SNAP-CAP units
-    2: "is eligible for SNAP in another SNAP unit, not currently under review",
+    1: "Eligible member of SNAP case under review and entitled to receive benefits",
+    2: "Eligible SNAP participant in another unit, not currently under review (code added by Matematica for use in certain SNAP-CAP units)",
     # no code 3 included
-    4: "is SNAP ineligible. They are a noncitizen and not participating in State-funded SNAP",
-    5: "is SNAP ineligible. They are not paying/cooperating with child support agency",
-    6: "is SNAP ineligible. They are on strike",
-    7: "is SNAP ineligible. They are a student",
-    8: "is SNAP ineligible. They were disqualified for a program violation",
-    9: "is SNAP ineligible due to disqualification or failure to meet work requirements (work registration, E&T, acceptance of employment, employment status/job availability, voluntary quit/reducing work effort, workfare/comparable workfare)",
-    10: "is SNAP ineligible due to able-bodied adult without dependents (ABAWD) and their time limit exhausted and they failed to meet ABAWD work requirements (to work at least 20 hours per week, to participate in at least 20 hours per week in qualifying educational training activities, or to participate in workfare)",
-    11: "is SNAP ineligible because they are a fleeing felon or a parole and probation violator",
+    4: "Member is ineligible noncitizen and not participating in State-funded SNAP",
+    5: "Member not paying/cooperating with child support agency",
+    6: "Member is ineligible striker",
+    7: "Member is ineligible student",
+    8: "Member disqualified for program violation",
+    9: "Member ineligible to participate due to disqualification or failure to meet work requirements (work registration, E&T, acceptance of employment, employment status/job availability, voluntary quit/reducing work effort, workfare/comparable workfare)",
+    10: "ABAWD time limit exhausted and ABAWD ineligible to participate due to failure to meet ABAWD work requirements, to work at least 20 hours per week, to participate in at least 20 hours per week in qualifying educational training activities, or to participate in workfare",
+    11: "Fleeing felon or parole and probation violator",
     # no code for 12 included
-    13: "is SNAP ineligible because they are a convicted drug felon",
-    14: "is SNAP ineligible because their Social Security Number was disqualified",
-    15: "is SNAP ineligible because they are a SSI recipient in California",
-    16: "is SNAP ineligible because they are a prisoner in detention center",
-    17: "is SNAP ineligible because they are in foster care",
-    18: "is SNAP ineligible because they are a noncitizen and participating in State-funded SNAP",
-    19: "is SNAP ineligible. They are an individual in the home but not part of SNAP household",
-    99: "has an unknown SNAP eligibility status",
+    13: "Convicted drug felon",
+    14: "Social Security Number disqualified",
+    15: "SSI recipient in California",
+    16: "Prisoner in detention center",
+    17: "Foster care",
+    18: "Member is ineligible noncitizen and participating in State-funded SNAP",
+    19: "Individual in the home but not part of SNAP household",
+    99: "Unknown",
 }
-
-
-CTZN = {
-    1: "a US-born citizen",
-    2: "a naturalized citizen",
-    3: "a legal permanent resident with 40 quarters of work, military service, five years legal U.S. residency, disability, or under age 18",
-    5: "a person admitted as refugee, granted asylum, or given stay of deportation",
-    6: "an other eligible noncitizen",
-    7: "a noncitizen legally in U.S. who does not meet one of the above codes and is not receiving SNAP benefits but whose income and resources must be considered in determining benefits",
-    8: "an other ineligible legal noncitizen (for example, visitor, tourist, student, diplomat)",
-    9: "an undocumented noncitizen",
-    10: "a noncitizen, status unknown",
-}
-
-SEX = {1: "male", 2: "female"}
-
-DIS = {0: "have a disability", 1: "do not have a disability"}
-
-RACETH = {
-    1: "Their racial/ethnic information is not available because application was not found",
-    2: "Their racial/ethnic information was not recorded on application",
-    3: "They are an American Indian or Alaska Native",
-    4: "They are Asian",
-    5: "They are Black or African American",
-    6: "They are Native Hawaiian or other Pacific Islander",
-    7: "They are White",
-    8: "They are American Indian or Alaska Native and White",
-    9: "They are biracial; They are Asian and White",
-    10: "They are biracial; They are Black or African American and White",
-    11: "They are biracial; They are American Indian or Alaska Native and Black or African American",
-    # = Respondent reported more than one race and does not fit into above categories (codes 8 through 11)
-    12: "They reported more than one race and do not fit into a category",
-    13: "They are biracial; They are Hispanic or Latino and American Indian or Alaska Native",
-    14: "They are biracial; They are Hispanic or Latino and Asian",
-    15: "They are biracial; They are Hispanic or Latino and Black or African American",
-    16: "They are biracial; They are Hispanic or Latino and Native Hawaiian or other Pacific Islander",
-    17: "They are biracial; They are Hispanic or Latino and White",
-    18: "They are multiracial; They are Hispanic or Latino and American Indian or Alaska Native and White",
-    19: "They are multiracial; They are Hispanic or Latino and Asian and White",
-    20: "They are multiracial; They are Hispanic or Latino and Black or African American and White",
-    21: "They are multiracial; They are Hispanic or Latino and American Indian or Alaska Native and Black or African American",
-    # = (Hispanic or Latino) and respondent reported more than one race and does not fit into above categories (codes 18 through 21)
-    22: "They are Hispanic or Latino, and reported more than one race and doesn't fit into a category",
-}
-
-YRSED = {
-    0: "They did not complete any schooling",
-    1: "Their highest education attained is through grade 1",
-    2: "Their highest education attained is through grade 2",
-    3: "Their highest education attained is through grade 3",
-    4: "Their highest education attained is through grade 4",
-    5: "Their highest education attained is through grade 5",
-    6: "Their highest education attained is through grade 6",
-    7: "Their highest education attained is through grade 7",
-    8: "Their highest education attained is through grade 8",
-    9: "Their highest education attained is through grade 9",
-    10: "Their highest education attained is through grade 10",
-    11: "Their highest education attained is through grade 11",
-    12: "They are a high school graduate or have their GED",
-    13: "They have a postsecondary education or have a technical education or started but did not finish college",
-    14: "They are a college graduate or have a postgraduate degree",
-}
-
-WORK = {0: "not employed", 1: "working"}
-
-EMPSTA = {
-    1: "and not looking for work",
-    2: "and looking for work",
-    3: "as active-duty military",
-    4: "as a migrant farm laborer",
-    5: "as a nonmigrant farm laborer",
-    6: "as a self-employed farmer",
-    7: "as self-employed that is not farming",
-    8: "and employed by someone else",
-}
-
-WRKREG_2021 = {
-    1: "Work registrant",
-    2: "Federal exemption, physically or mentally unfit for employment",
-    3: "Federal exemption, care of a child under 6 or an incapacitated person",
-    4: "Federal exemption, working and/or earning the equivalent of 30 hours per week",
-    5: "Federal exemption, other",
-}
-
 
 AGENCY = {
     1: "Information not reported",

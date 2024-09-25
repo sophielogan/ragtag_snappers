@@ -48,7 +48,7 @@ class SnapApplication(object):
                     f"""
                 There is a {self.app.loc[f'AGE{i+1}']} year old {SEX[self.app.loc[f'SEX{i+1}']]};
                 they are {REL[self.app.loc[f'REL{i+1}']]}.
-                This individual is {FSAFIL[self.app.loc[f'FSAFIL{i+1}']]}.
+                This individual {FSAFIL[self.app.loc[f'FSAFIL{i+1}']]}.
                 They are {CTZN[self.app.loc[f'CTZN{i+1}']]} and {DIS[self.app.loc[f'DIS{i+1}']]}.
                 {RACETH[self.app.loc[f'RACETH{i+1}']]}.
                 {YRSED[self.app.loc[f'YRSED{i+1}']]}.

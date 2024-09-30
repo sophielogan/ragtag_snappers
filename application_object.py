@@ -19,6 +19,7 @@ from config import (
 
 import math
 import textwrap
+import numpy as np
 
 
 class SnapApplication(object):
@@ -26,24 +27,24 @@ class SnapApplication(object):
     def __init__(self, application):
 
         self.app = application
+        total_persons = 0
+        num_applicants = [
+            applicant
+            for applicant in self.app.loc["FSAFIL1":"FSAFIL16"].tolist()
+            if not math.isnan(applicant)
+        ]
 
         # person-level characteristics
         persons = {}
-        total_persons = 0
-        num_applicants = self.app.loc["FSAFIL1":"FSAFIL16"].tolist()
+        person_level = []
         # i + 1 reflects the person's characteristics column number
         for i, person in enumerate(num_applicants):
             if math.isnan(person):
                 continue
             total_persons += 1
 
-            # unit-level
-            # Within this SNAP unit there are X individuals.
-            # The X person is the head of the household. / The first listed adult is hoh. / The oldest child is the head of the household.
-            # (0s) N peope live in the household and are not part of the SNAP unit.
-
             # story of one person
-            person_level = (
+            person_dems = (
                 textwrap.dedent(
                     f"""
                 There is a {self.app.loc[f'AGE{i+1}']} year old {SEX[self.app.loc[f'SEX{i+1}']]};
@@ -60,13 +61,20 @@ class SnapApplication(object):
                 .strip()
             )
 
+            if self.app.loc[f"REL{i+1}"] == 1:
+                head_of_household = f"A {self.app.loc[f'AGE{i+1}']} year old {SEX[self.app.loc[f'SEX{i+1}']]} is head of the household."
+            else:
+                head_of_household = None
+
+            person_level.append(person_dems)
             # If not working are they federally exempt? {WRKREG}
             # They are {EMPRG employment training program} and {EMPSTA employment status}
             # {1,2} This person is elgiible for SNAP / {4+} This person is ineligible for SNAP / {99} unknown
 
-            import pdb
-
-            pdb.set_trace()
+        # unit-level
+        unit_level = textwrap.dedent(
+            f"""{'The household consists of ' + str(total_persons) + ' individual(s).' if head_of_household else 'No one was listed as head of household'}"""
+        )
 
         # filter for errors
 

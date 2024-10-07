@@ -67,6 +67,7 @@ class SnapApplication(object):
                 head_of_household = None
 
             person_level.append(person_dems)
+
             # If not working are they federally exempt? {WRKREG}
             # They are {EMPRG employment training program} and {EMPSTA employment status}
             # {1,2} This person is elgiible for SNAP / {4+} This person is ineligible for SNAP / {99} unknown
@@ -75,6 +76,9 @@ class SnapApplication(object):
         unit_level = textwrap.dedent(
             f"""{'The household consists of ' + str(total_persons) + ' individual(s).' if head_of_household else 'No one was listed as head of household'}"""
         )
+
+        print(unit_level)
+        print(" ".join(person_level))
 
         # filter for errors
 
